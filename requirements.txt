@@ -1,0 +1,5 @@
+twitter
+numpy
+pandas
+PIL
+wordcloud
