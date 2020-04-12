@@ -1,5 +1,4 @@
 twitter
 numpy
-pandas
-PIL
 wordcloud
+nltk

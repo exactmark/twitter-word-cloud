@@ -1,7 +1,9 @@
 import twitter
 import json
+from pickle_api import store_pickle
 
 
+# Modified from https://github.com/mikhailklassen/Mining-the-Social-Web-3rd-Edition
 class twitter_obj():
 
     def __init__(self):
@@ -54,6 +56,6 @@ class twitter_obj():
             
             search_results = self.twitter_api.search.tweets(**kwargs)
             statuses += search_results['statuses']
-        
-        # Show one sample search result by slicing the list...
-        print(json.dumps(statuses[0], indent=1))
+
+        return statuses
+        # store_pickle(statuses, "pickled_statuses.pkl")
