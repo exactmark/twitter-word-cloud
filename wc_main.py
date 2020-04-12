@@ -25,11 +25,13 @@ word_dicts={}
 for single_trend in trends[0]["trends"]:
     # print(single_trend)
     if single_trend['tweet_volume']==None:
-        tweet_volume=1
+        tweet_volume=10
     else:
         tweet_volume=single_trend['tweet_volume']
     word_dicts[single_trend['name']]=tweet_volume
     
 print(word_dicts)
     
-create_wordcloud_file_from_dict(word_dicts,"newfunc2.png")
+create_wordcloud_file_from_dict(word_dicts,"newfunc3.png")
+
+my_api.get_dumps_for_topic(trends[0]["trends"][0]["name"])
