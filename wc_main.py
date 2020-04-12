@@ -47,7 +47,6 @@ while True:
 
     new_table = create_table_from_trend_dicts(time_iter,time_iter_str,trend_list,trend_url_dict,root_dir)
     # print(new_table)
-    append_table_to_index(root_dir,new_table)
 
     for trend_index,single_trend_obj in enumerate( trend_list):
         trend_name=single_trend_obj[1]
@@ -62,4 +61,7 @@ while True:
         image_path = os.path.join(root_dir,"imgs",str(time_iter),str(trend_index)+".png")
         print("creating "+os.path.normpath(image_path))
         create_wordcloud_file_from_dict(text_word_dict, os.path.normpath(image_path))
+
+    append_table_to_index(root_dir,new_table)
+
     time.sleep(3600)
