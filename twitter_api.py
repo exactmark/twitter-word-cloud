@@ -24,8 +24,8 @@ class twitter_obj():
 
     def get_region_trends(self, region_id):
         trends = self.twitter_api.trends.place(_id=region_id)
-        for trend in trends[0]['trends']:
-            print(trend['name'])
+        # for trend in trends[0]['trends']:
+        #     print(trend['name'])
         return trends
 
     def get_dumps_for_topic(self,topic,count_arg=100):
@@ -44,7 +44,7 @@ class twitter_obj():
         
         # Iterate through 5 more batches of results by following the cursor
         for _ in range(5):
-            print('Length of statuses', len(statuses))
+            # print('Length of statuses', len(statuses))
             try:
                 next_results = search_results['search_metadata']['next_results']
             except KeyError as e: # No more results when next_results doesn't exist
