@@ -1,5 +1,6 @@
 import os
-
+import shutil
+from text_mod_api import remove_non_ascii
 
 def get_current_body(page_root):
     index_path = os.path.join(page_root, "index.html")
@@ -48,7 +49,7 @@ def create_table_from_trend_dicts(date_time_num, date_time_str, trend_list, tren
 def get_blank_index_list():
     return ["<!DOCTYPE html>","<html lang='en'>","<head>","    <meta charset='UTF-8'>","    <title>Title</title>","</head>","<body>","</body>","</html>"]
 
-def append_table_to_index(page_root,new_table):
+def append_table_to_index(page_root,new_table,date_time_num):
     index_path = os.path.join(page_root, "index.html")
     if not os.path.exists(index_path):
         print("does not exist")
@@ -61,5 +62,19 @@ def append_table_to_index(page_root,new_table):
                 working_index.append(line.rstrip())
     body_close_index = working_index.index("</body>")
     working_index = working_index[:body_close_index]+new_table+working_index[body_close_index:]
-    with open(index_path,'w') as current_index_file:
-        current_index_file.write('\n'.join(working_index))
+    try:
+        os.makedirs(os.path.join(page_root,"backups"))
+    except FileExistsError:
+        pass
+    backup_path = os.path.join(page_root,"backups", str(date_time_num)+".index.html")
+    try:
+        shutil.copyfile(index_path,backup_path)
+    except:
+        pass
+    try:
+        with open(index_path,'w') as current_index_file:
+            working_index = remove_non_ascii(working_index)
+            current_index_file.write('\n'.join(working_index))
+    except:
+        shutil.copyfile(backup_path,index_path)
+
