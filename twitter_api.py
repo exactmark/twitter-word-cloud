@@ -28,32 +28,31 @@ class twitter_obj():
         #     print(trend['name'])
         return trends
 
-    def get_dumps_for_topic(self,topic,count_arg=100):
+    def get_dumps_for_topic(self, topic, count_arg=100):
         q = topic
         count = count_arg
-        
+
         # Import unquote to prevent url encoding errors in next_results
         from urllib.parse import unquote
-        
+
         # See https://dev.twitter.com/rest/reference/get/search/tweets
-        
+
         search_results = self.twitter_api.search.tweets(q=q, count=count)
-        
+
         statuses = search_results['statuses']
-        
-        
+
         # Iterate through 5 more batches of results by following the cursor
         for _ in range(5):
             # print('Length of statuses', len(statuses))
             try:
                 next_results = search_results['search_metadata']['next_results']
-            except KeyError as e: # No more results when next_results doesn't exist
+            except KeyError as e:  # No more results when next_results doesn't exist
                 break
-                
+
             # Create a dictionary from next_results, which has the following form:
             # ?max_id=847960489447628799&q=%23RIPSelena&count=100&include_entities=1
-            kwargs = dict([ kv.split('=') for kv in unquote(next_results[1:]).split("&") ])
-            
+            kwargs = dict([kv.split('=') for kv in unquote(next_results[1:]).split("&")])
+
             search_results = self.twitter_api.search.tweets(**kwargs)
             statuses += search_results['statuses']
 
