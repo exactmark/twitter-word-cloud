@@ -13,6 +13,8 @@ import os, time
 
 
 root_dir = "page"
+max_trends = 10
+store_archive_data = True
 
 # for loop goes here
 while True:
@@ -21,9 +23,10 @@ while True:
     time_iter_str = now.strftime("%Y/%m/%d, %H:%M:%S")
     os.makedirs(os.path.join(root_dir, "imgs", str(time_iter)))
     os.makedirs(os.path.join(root_dir, "data", str(time_iter)))
-    my_api = twitter_obj()
-    trends = my_api.get_us_trends()
-    store_pickle(trends, os.path.join(root_dir, "data", str(time_iter), "trends." + str(time_iter) + ".pkl"))
+    my_twitter_api = twitter_obj()
+    trends = my_twitter_api.get_us_trends()
+    if store_archive_data:
+        store_pickle(trends, os.path.join(root_dir, "data", str(time_iter), "trends." + str(time_iter) + ".pkl"))
 
     trend_dict = {}
     trend_url_dict = {}
@@ -43,7 +46,7 @@ while True:
     for trend_key in trend_dict.keys():
         trend_list.append([trend_dict[trend_key], trend_key])
     trend_list.sort(reverse=True)
-    trend_list = trend_list[:10]
+    trend_list = trend_list[:max_trends]
 
     new_table = create_table_from_trend_dicts(time_iter, time_iter_str, trend_list, trend_url_dict, root_dir)
     # print(new_table)
@@ -53,9 +56,10 @@ while True:
     try:
         for trend_index, single_trend_obj in enumerate(trend_list):
             trend_name = single_trend_obj[1]
-            statuses = my_api.get_dumps_for_topic(trend_name)
-            store_pickle(statuses,
-                         os.path.join(root_dir, "data", str(time_iter), "statuses." + str(trend_index) + ".pkl"))
+            statuses = my_twitter_api.get_dumps_for_topic(trend_name)
+            if store_archive_data:
+                store_pickle(statuses,
+                             os.path.join(root_dir, "data", str(time_iter), "statuses." + str(trend_index) + ".pkl"))
 
             # statuses = get_pickle('pickled_statuses.pkl')
 
